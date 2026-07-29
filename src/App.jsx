@@ -24,7 +24,7 @@ const TABS = [
   { id: "json", label: "Paste capability JSON-LD" },
 ]
 
-const DEFAULT_URL = `${location.origin}/app-capability.jsonld`
+const DEFAULT_URL = location.origin
 
 function GithubIcon(props) {
   return (
@@ -200,7 +200,7 @@ export default function App() {
         <div>
           <h1 className="mb-1 text-xl font-semibold text-zinc-900 dark:text-zinc-100">Application Capability validator</h1>
           <div className="max-w-2xl text-sm text-zinc-500 dark:text-zinc-400">
-            Fetch a page or paste a capability document directly and validate it against a real{" "}
+            Validate a pages Application Capability description against a real{" "}
             <a className={linkClass} href="https://www.w3.org/TR/shacl/" target="_blank" rel="noopener noreferrer">
               SHACL
             </a>{" "}
@@ -208,8 +208,7 @@ export default function App() {
             <a className={linkClass} href="https://dokieli.github.io/application-capability/" target="_blank" rel="noopener noreferrer">
               Application Capability
             </a>{" "}
-            vocabulary. Runs entirely in your browser — nothing is sent anywhere except an optional
-            same-origin/CORS-enabled fetch you trigger yourself.
+            vocabulary.
           </div>
         </div>
         <a
