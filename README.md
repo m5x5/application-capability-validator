@@ -1,16 +1,39 @@
-# React + Vite
+# Application Capability validator
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A browser-based validator for [Application Capability](https://dokieli.github.io/application-capability/)
+documents. Paste a page's HTML, a capability document directly, or fetch a URL, and validate it
+against a real [SHACL](https://www.w3.org/TR/shacl/) shape for the vocabulary.
 
-Currently, two official plugins are available:
+Everything runs client-side — nothing is sent anywhere except an optional same-origin/CORS-enabled
+fetch you trigger yourself.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Try it: https://github.com/m5x5/application-capability-validator
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- Discover an Application Capability document from a page's HTML (`<link>` discovery) or fetch one directly
+- Paste HTML, paste JSON-LD, or fetch a URL to validate
+- SHACL validation against the Application Capability shapes, with per-issue reporting
+- Inspect the raw JSON-LD document and referenced shapes in a code panel
 
-## Expanding the Oxlint configuration
+## Getting started
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+```bash
+npm install
+npm run dev
+```
+
+Other scripts:
+
+```bash
+npm run build    # production build
+npm run preview  # preview the production build
+npm run lint     # oxlint
+```
+
+## Tech stack
+
+- [React](https://react.dev) + [Vite](https://vitejs.dev)
+- [shacl-engine](https://github.com/rdf-ext/shacl-engine) and [n3](https://github.com/rdfjs/N3.js) for RDF/SHACL processing
+- [jsonld](https://github.com/digitalbazaar/jsonld.js) for JSON-LD expansion
+- [Tailwind CSS](https://tailwindcss.com) for styling
