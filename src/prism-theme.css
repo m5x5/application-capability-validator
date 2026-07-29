@@ -1,0 +1,97 @@
+/* Minimal Prism token theme matching the app's zinc/blue palette (light + dark),
+   deliberately not importing a full prism theme so it doesn't fight our own
+   card backgrounds/borders. */
+
+code[class*="language-"],
+pre[class*="language-"] {
+  color: inherit;
+  background: none;
+  text-shadow: none;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+  color: #6b7280; /* zinc-500 */
+  font-style: italic;
+}
+
+.token.punctuation {
+  color: inherit;
+  opacity: 0.7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+  color: #b45309; /* amber-700 */
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin {
+  color: #15803d; /* green-700 */
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.token.variable {
+  color: #b91c1c; /* red-700 */
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+  color: #1d4ed8; /* blue-700 */
+}
+
+.token.regex,
+.token.important {
+  color: #a21caf; /* fuchsia-700 */
+}
+
+@media (prefers-color-scheme: dark) {
+  .token.comment,
+  .token.prolog,
+  .token.doctype,
+  .token.cdata {
+    color: #9ca3af; /* zinc-400 */
+  }
+  .token.property,
+  .token.tag,
+  .token.boolean,
+  .token.number,
+  .token.constant,
+  .token.symbol {
+    color: #fbbf24; /* amber-400 */
+  }
+  .token.selector,
+  .token.attr-name,
+  .token.string,
+  .token.char,
+  .token.builtin {
+    color: #4ade80; /* green-400 */
+  }
+  .token.operator,
+  .token.entity,
+  .token.url,
+  .token.variable {
+    color: #f87171; /* red-400 */
+  }
+  .token.atrule,
+  .token.attr-value,
+  .token.keyword {
+    color: #60a5fa; /* blue-400 */
+  }
+  .token.regex,
+  .token.important {
+    color: #e879f9; /* fuchsia-400 */
+  }
+}

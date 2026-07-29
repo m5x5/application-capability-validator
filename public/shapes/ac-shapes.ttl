@@ -1,0 +1,167 @@
+# SHACL shapes for the Application Capability vocabulary
+# (https://dokieli.github.io/application-capability/). Authored by hand from
+# the spec's Data Model section (Capability §, Invocation §, Requirement §) —
+# the spec itself does not yet publish normative SHACL shapes.
+#
+# Two kinds of shape per class:
+#   - a `*MembershipShape`, targeting the *objects* of ac:capability /
+#     ac:requirement, asserting they carry the expected rdf:type. This is
+#     what catches "capability object present but untyped", which a plain
+#     sh:targetClass shape would silently skip (SHACL only evaluates nodes
+#     that already match the target).
+#   - the class shape itself (sh:targetClass), constraining its properties.
+
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix ac:   <https://www.w3.org/ns/ac#> .
+@prefix ldp:  <http://www.w3.org/ns/ldp#> .
+@prefix dpv:  <https://w3id.org/dpv#> .
+
+# ==================== Application description subject ====================
+# "capability and requirement properties can be attached to any resource
+# identifying an application; the Application type is not required."
+# So this shape targets whatever subject carries these properties, not a class.
+
+ac:ApplicationDescriptionShape a sh:NodeShape ;
+    sh:targetSubjectsOf ac:capability, ac:requirement ;
+    sh:property [
+        sh:path ac:capability ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+        sh:severity sh:Warning ;
+        sh:message "An application description should link at least one ac:capability." ;
+    ] ;
+    sh:property [
+        sh:path ac:requirement ;
+        sh:nodeKind sh:IRI ;
+    ] ;
+    sh:property [
+        sh:path ldp:inbox ;
+        sh:nodeKind sh:IRI ;
+        sh:maxCount 1 ;
+    ] .
+
+# ==================== Capability ====================
+
+ac:CapabilityMembershipShape a sh:NodeShape ;
+    sh:targetObjectsOf ac:capability ;
+    sh:property [
+        sh:path rdf:type ;
+        sh:hasValue ac:Capability ;
+        sh:minCount 1 ;
+        sh:severity sh:Warning ;
+        sh:message "Every value of ac:capability should be typed ac:Capability." ;
+    ] .
+
+ac:CapabilityShape a sh:NodeShape ;
+    sh:targetClass ac:Capability ;
+    sh:property [
+        sh:path ac:action ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "A Capability declares exactly one ac:action (preferably from a shared vocabulary, e.g. ODRL)." ;
+    ] ;
+    sh:property [
+        sh:path ac:accept ;
+        sh:nodeKind sh:Literal ;
+        sh:message "ac:accept values are media types (RFC 2046 strings), not IRIs." ;
+    ] ;
+    sh:property [
+        sh:path ac:output ;
+        sh:nodeKind sh:Literal ;
+        sh:message "ac:output values are media types (RFC 2046 strings), not IRIs." ;
+    ] ;
+    sh:property [
+        sh:path ac:resourceType ;
+        sh:nodeKind sh:IRI ;
+        sh:message "ac:resourceType values are IRIs identifying resource classes." ;
+    ] ;
+    sh:property [
+        sh:path ac:shape ;
+        sh:nodeKind sh:IRI ;
+        sh:message "ac:shape values are IRIs identifying shapes (e.g. SHACL/ShEx)." ;
+    ] ;
+    sh:property [
+        sh:path ac:destination ;
+        sh:nodeKind sh:IRI ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:invocation ;
+        sh:nodeKind sh:BlankNodeOrIRI ;
+    ] .
+
+# ==================== Invocation ====================
+
+ac:UriTemplateInvocationMembershipShape a sh:NodeShape ;
+    sh:targetObjectsOf ac:invocation ;
+    sh:property [
+        sh:path rdf:type ;
+        sh:minCount 1 ;
+        sh:severity sh:Warning ;
+        sh:message "Every ac:invocation value should be typed with an Invocation subclass, e.g. ac:UriTemplateInvocation." ;
+    ] .
+
+ac:UriTemplateInvocationShape a sh:NodeShape ;
+    sh:targetClass ac:UriTemplateInvocation ;
+    sh:property [
+        sh:path ac:template ;
+        sh:nodeKind sh:Literal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:message "A UriTemplateInvocation requires an RFC 6570 ac:template string." ;
+    ] ;
+    sh:property [
+        sh:path ac:mapping ;
+        sh:nodeKind sh:BlankNodeOrIRI ;
+    ] .
+
+ac:MappingShape a sh:NodeShape ;
+    sh:targetObjectsOf ac:mapping ;
+    sh:property [
+        sh:path ac:variable ;
+        sh:nodeKind sh:Literal ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:property [
+        sh:path ac:property ;
+        sh:nodeKind sh:IRI ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+    ] .
+
+# ==================== Requirement ====================
+
+ac:RequirementMembershipShape a sh:NodeShape ;
+    sh:targetObjectsOf ac:requirement ;
+    sh:property [
+        sh:path rdf:type ;
+        sh:hasValue ac:Requirement ;
+        sh:minCount 1 ;
+        sh:severity sh:Warning ;
+        sh:message "Every value of ac:requirement should be typed ac:Requirement." ;
+    ] .
+
+ac:RequirementShape a sh:NodeShape ;
+    sh:targetClass ac:Requirement ;
+    sh:severity sh:Warning ;
+    sh:property [
+        sh:path ac:cspDirective ;
+        sh:nodeKind sh:Literal ;
+    ] ;
+    sh:property [
+        sh:path ac:browserPermission ;
+        sh:nodeKind sh:Literal ;
+    ] ;
+    sh:property [
+        sh:path dpv:hasPurpose ;
+        sh:nodeKind sh:BlankNodeOrIRI ;
+        sh:maxCount 1 ;
+    ] ;
+    sh:or (
+        [ sh:property [ sh:path ac:cspDirective ; sh:minCount 1 ] ]
+        [ sh:property [ sh:path ac:browserPermission ; sh:minCount 1 ] ]
+    ) ;
+    sh:message "A Requirement declares a cspDirective and/or a browserPermission — the environmental need it represents." .

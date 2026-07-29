@@ -1,0 +1,23 @@
+{
+  "@context": "https://www.w3.org/ns/ac.jsonld",
+  "id": "/#app",
+  "type": "as:Application",
+  "as:name": "Application Capability validator",
+  "as:summary": "Fetches, discovers, and SHACL-validates an Application Capability description found at a given URL.",
+
+  "capability": [
+    {
+      "id": "/#capability-validate",
+      "type": "Capability",
+      "as:summary": "Open a URL, discover its Application Capability description (content negotiation, then <link>/embedded fallback), and show a SHACL validation report",
+      "action": "odrl:display",
+      "accept": "text/html",
+      "shape": "/shapes/ac-shapes.ttl",
+      "invocation": {
+        "id": "/#invoke-validate",
+        "type": "UriTemplateInvocation",
+        "template": "#validate={validate}"
+      }
+    }
+  ]
+}
