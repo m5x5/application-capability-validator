@@ -4,9 +4,6 @@ A browser-based validator for [Application Capability](https://dokieli.github.io
 documents. Paste a page's HTML, a capability document directly, or fetch a URL, and validate it
 against a real [SHACL](https://www.w3.org/TR/shacl/) shape for the vocabulary.
 
-Everything runs client-side — nothing is sent anywhere except an optional same-origin/CORS-enabled
-fetch you trigger yourself.
-
 Try it: https://github.com/m5x5/application-capability-validator
 
 ## Features
