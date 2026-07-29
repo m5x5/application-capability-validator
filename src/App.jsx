@@ -21,7 +21,6 @@ import CodeEditor from "./components/CodeEditor"
 
 const TABS = [
   { id: "url", label: "Fetch a URL" },
-  { id: "html", label: "Paste HTML" },
   { id: "json", label: "Paste capability JSON-LD" },
 ]
 
@@ -38,8 +37,6 @@ function GithubIcon(props) {
 export default function App() {
   const [tab, setTab] = useState("url")
   const [url, setUrl] = useState(DEFAULT_URL)
-  const [html, setHtml] = useState("")
-  const [base, setBase] = useState("")
   const [json, setJson] = useState("")
   const [jsonBase, setJsonBase] = useState("")
 
@@ -144,7 +141,7 @@ export default function App() {
       alert(
         `Could not fetch ${targetUrl}.\n\n` +
           "This is almost always CORS or an unreachable URL from this browser. " +
-          `View the page's source and use the "Paste HTML" tab instead.\n\n${e.message}`
+          `Copy the document's contents instead and use the "Paste capability JSON-LD" tab.\n\n${e.message}`
       )
     }
   }
@@ -173,17 +170,6 @@ export default function App() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
-
-  function handleHtmlAnalyze() {
-    if (!html.trim()) return
-    setDoc(null)
-    const found = discoverFromHtml(html, base || undefined)
-    setDiscovery(found)
-    if (found.embedded.length === 1 && found.links.length === 0) {
-      setBaseUrl(base || undefined)
-      setDoc(found.embedded[0].doc)
-    }
-  }
 
   function handleJsonAnalyze() {
     setDiscovery(null)
@@ -214,7 +200,7 @@ export default function App() {
         <div>
           <h1 className="mb-1 text-xl font-semibold text-zinc-900 dark:text-zinc-100">Application Capability validator</h1>
           <div className="max-w-2xl text-sm text-zinc-500 dark:text-zinc-400">
-            Paste a page's HTML (or a capability document directly) and validate it against a real{" "}
+            Fetch a page or paste a capability document directly and validate it against a real{" "}
             <a className={linkClass} href="https://www.w3.org/TR/shacl/" target="_blank" rel="noopener noreferrer">
               SHACL
             </a>{" "}
@@ -270,37 +256,6 @@ export default function App() {
           </div>
         )}
 
-        {tab === "html" && (
-          <div>
-            <label className={labelClass} htmlFor="html-input">
-              HTML source
-            </label>
-            <textarea
-              id="html-input"
-              value={html}
-              onChange={(e) => setHtml(e.target.value)}
-              placeholder="<html>...</html>"
-              className={textareaClass}
-            />
-            <div className="mt-2 flex flex-wrap items-center gap-2">
-              <label className="m-0 flex-none text-sm text-zinc-500 dark:text-zinc-400" htmlFor="base-input">
-                Base URL (to resolve relative links)
-              </label>
-              <input
-                id="base-input"
-                type="text"
-                value={base}
-                onChange={(e) => setBase(e.target.value)}
-                placeholder="https://example.org/"
-                className={`${inputClass} min-w-[200px] flex-1`}
-              />
-              <button className={buttonClass} onClick={handleHtmlAnalyze}>
-                Analyze
-              </button>
-            </div>
-          </div>
-        )}
-
         {tab === "json" && (
           <div>
             <label className={labelClass} htmlFor="json-input">
@@ -339,7 +294,7 @@ export default function App() {
           discovery={discovery}
           onFetch={fetchAndAnalyze}
           onValidateEmbedded={(embeddedDoc) => {
-            setBaseUrl((tab === "html" ? base : url) || undefined)
+            setBaseUrl(url || undefined)
             setDoc(embeddedDoc)
           }}
         />
